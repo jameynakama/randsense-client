@@ -15,6 +15,8 @@ const Sentence = ({ sentence }) => {
 
   React.useEffect(() => {
     setIncorrectEnabled(true);
+    setShowSentenceData(false);
+    setWordData(null);
   }, [sentence]);
 
   const wordObjects = sentence.base;
