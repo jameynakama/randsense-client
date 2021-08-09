@@ -1,26 +1,26 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import ReactJson from 'react-json-view';
+import React from "react";
+import PropTypes from "prop-types";
+import ReactJson from "react-json-view";
 
-import Word from '../Word/Word';
+import Word from "../Word/Word";
 
-import css from './Sentence.module.css';
-import * as constants from '../../util/constants';
+import css from "./Sentence.module.css";
+import * as constants from "../../util/constants";
 
-const Sentence = ({sentence}) => {
+const Sentence = ({ sentence }) => {
   // TODO: Enable finding words that are actually multiple words (like "banana peel")
-  const [ wordData, setWordData ] = React.useState(null);
-  const [ showSentenceData, setShowSentenceData ] = React.useState(false);
-  const [ incorrectEnabled, setIncorrectEnabled ] = React.useState(true);
+  const [wordData, setWordData] = React.useState(null);
+  const [showSentenceData, setShowSentenceData] = React.useState(false);
+  const [incorrectEnabled, setIncorrectEnabled] = React.useState(true);
 
   React.useEffect(() => {
     setIncorrectEnabled(true);
-  }, [sentence])
+  }, [sentence]);
 
   const wordObjects = sentence.base;
-  const inflectedWords = sentence.inflected.split(' ');
+  const inflectedWords = sentence.inflected.split(" ");
 
-  const handleWordClick = wordObject => {
+  const handleWordClick = (wordObject) => {
     setWordData(wordObject);
     setShowSentenceData(false);
   };
@@ -28,48 +28,52 @@ const Sentence = ({sentence}) => {
   const handleSentenceDataClick = () => {
     setShowSentenceData(true);
     setWordData(null);
-  }
+  };
 
-  const handleIncorrectClick = id => {
+  const handleIncorrectClick = (id) => {
     setIncorrectEnabled(false);
     fetch(`${constants.RANDSENSE_API_BASE}sentences/${id}/`, {
-      method: "PATCH"
+      method: "PATCH",
     });
-  }
+  };
 
   return (
     <>
       <div className={css.sentence}>
-        {inflectedWords.map((word, i) =>
-          <Word key={i} inflectedWord={word} onClick={() => handleWordClick(wordObjects[i])}/>
-        )}
+        {inflectedWords.map((word, i) => (
+          <Word
+            key={i}
+            inflectedWord={word}
+            onClick={() => handleWordClick(wordObjects[i])}
+          />
+        ))}
       </div>
-      <button className="appButton" onClick={handleSentenceDataClick}>See sentence data</button>
+      <button className="appButton" onClick={handleSentenceDataClick}>
+        See sentence data
+      </button>
       <button
         className="appButton"
         onClick={() => handleIncorrectClick(sentence.id)}
-        disabled={!incorrectEnabled}>
-          {incorrectEnabled ?
-            "Is this grammatically incorrect?" :
-            "Thank you!"
-          }
-        </button>
-      {showSentenceData &&
+        disabled={!incorrectEnabled}
+      >
+        {incorrectEnabled ? "Is this grammatically incorrect?" : "Thank you!"}
+      </button>
+      {showSentenceData && (
         <div className={css.data}>
-          <ReactJson src={sentence}/>
+          <ReactJson src={sentence} />
         </div>
-      }
-      {wordData &&
+      )}
+      {wordData && (
         <div className={css.data}>
-          <ReactJson src={wordData} theme="summerfruit:inverted"/>
+          <ReactJson src={wordData} theme="summerfruit:inverted" />
         </div>
-      }
+      )}
     </>
   );
 };
 
 Sentence.propTypes = {
-  sentence: PropTypes.object.isRequired
+  sentence: PropTypes.object.isRequired,
 };
 
 export default Sentence;
