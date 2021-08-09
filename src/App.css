@@ -18,3 +18,13 @@
 .appButton:hover {
   transform: rotate(3deg);
 }
+
+.appButton:disabled {
+  background-color: palevioletred;
+  color: white;
+  cursor: auto;
+}
+
+.appButton:disabled:hover {
+  transform: none;
+}

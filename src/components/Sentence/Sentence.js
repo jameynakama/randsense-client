@@ -1,16 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactJson from 'react-json-view';
-import classnames from 'classnames';
 
 import Word from '../Word/Word';
 
 import css from './Sentence.module.css';
+import * as constants from '../../util/constants';
 
 const Sentence = ({sentence}) => {
   // TODO: Enable finding words that are actually multiple words (like "banana peel")
   const [ wordData, setWordData ] = React.useState(null);
   const [ showSentenceData, setShowSentenceData ] = React.useState(false);
+  const [ incorrectEnabled, setIncorrectEnabled ] = React.useState(true);
+
+  React.useEffect(() => {
+    setIncorrectEnabled(true);
+  }, [sentence])
 
   const wordObjects = sentence.base;
   const inflectedWords = sentence.inflected.split(' ');
@@ -25,6 +30,13 @@ const Sentence = ({sentence}) => {
     setWordData(null);
   }
 
+  const handleIncorrectClick = id => {
+    setIncorrectEnabled(false);
+    fetch(`${constants.RANDSENSE_API_BASE}sentences/${id}/`, {
+      method: "PATCH"
+    });
+  }
+
   return (
     <>
       <div className={css.sentence}>
@@ -33,14 +45,22 @@ const Sentence = ({sentence}) => {
         )}
       </div>
       <button className="appButton" onClick={handleSentenceDataClick}>See sentence data</button>
-      <button className="appButton" >Is this grammatically incorrect?</button>
+      <button
+        className="appButton"
+        onClick={() => handleIncorrectClick(sentence.id)}
+        disabled={!incorrectEnabled}>
+          {incorrectEnabled ?
+            "Is this grammatically incorrect?" :
+            "Thank you!"
+          }
+        </button>
       {showSentenceData &&
-        <div className={classnames(css.data, css.sentenceData)}>
+        <div className={css.data}>
           <ReactJson src={sentence}/>
         </div>
       }
       {wordData &&
-        <div className={classnames(css.data, css.wordData)}>
+        <div className={css.data}>
           <ReactJson src={wordData} theme="summerfruit:inverted"/>
         </div>
       }

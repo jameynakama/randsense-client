@@ -11,6 +11,7 @@ beforeEach(() => {
 const expectedSentence = 'There is a snake in my boots.';
 const data = {
   inflected: expectedSentence,
+  id: '666',
   base: [
     { fields: { base: 'there' } },
     { fields: { base: 'is' } },
@@ -44,5 +45,16 @@ describe('Sentence', () => {
     expect(screen.queryByText('poops')).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'See sentence data' }));
     expect(screen.queryByText('poops')).toBeInTheDocument();
+  });
+
+  it('should disable the incorrect button after click', async () => {
+    const mockFetch = jest.fn();
+    global.fetch = mockFetch;
+    render(<Sentence sentence={data}/>);
+    expect(screen.queryByText('Thank you!')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Is this grammatically incorrect?' }));
+    expect(screen.queryByText('Thank you!')).toBeInTheDocument();
+    expect(mockFetch)
+      .toBeCalledWith("http://localhost:8000/randsense/api/v1/sentences/666/", {"method": "PATCH"});
   });
 });
