@@ -1,0 +1,13 @@
+.wrapper button {
+    margin: .5rem;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    font-size: 4rem;
+    color: dodgerblue;
+    cursor: pointer;
+}
+
+.wrapper button:hover {
+    color: hotpink;
+}

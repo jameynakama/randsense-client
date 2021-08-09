@@ -1,0 +1,9 @@
+.wrapper h1 {
+    font-size: 5rem;
+    color: deeppink;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
