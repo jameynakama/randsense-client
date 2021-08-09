@@ -62,12 +62,12 @@ const Sentence = ({ sentence }) => {
       </button>
       {showSentenceData && (
         <div className={css.data}>
-          <ReactJson src={sentence} />
+          <ReactJson src={sentence} collapsed={1} theme={constants.JSON_VIEW_THEME}/>
         </div>
       )}
       {wordData && (
         <div className={css.data}>
-          <ReactJson src={wordData} theme="summerfruit:inverted" />
+          <ReactJson src={wordData} collapsed={1} theme={constants.JSON_VIEW_THEME}/>
         </div>
       )}
     </>
