@@ -19,9 +19,6 @@ const Sentence = ({ sentence }) => {
     setWordData(null);
   }, [sentence]);
 
-  const wordObjects = sentence.base;
-  const inflectedWords = sentence.inflected.split(" ");
-
   const handleWordClick = (wordObject) => {
     setWordData(wordObject);
     setShowSentenceData(false);
@@ -39,16 +36,22 @@ const Sentence = ({ sentence }) => {
     });
   };
 
+  const words = sentence.base.map(word =>
+    word.inflected || word.fields.base
+  );
+  words[0] = words[0].charAt(0).toUpperCase().concat(words[0].slice(1))
+
   return (
     <>
       <div className={css.sentence}>
-        {inflectedWords.map((word, i) => (
+        {words.map((word, i) => (
           <Word
             key={i}
-            inflectedWord={word}
-            onClick={() => handleWordClick(wordObjects[i])}
+            word={word}
+            onClick={() => handleWordClick(sentence.base[i])}
           />
         ))}
+        <Word word={sentence.inflected[sentence.inflected.length - 1]}/>
       </div>
       <button className="appButton" onClick={handleSentenceDataClick}>
         See sentence data

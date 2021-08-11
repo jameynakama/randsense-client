@@ -3,17 +3,27 @@ import PropTypes from "prop-types";
 
 import css from "./Word.module.css";
 
-const Word = ({ inflectedWord, onClick }) => {
+const Word = ({ word, onClick }) => {
   return (
     <span className={css.wrapper}>
-      <button onClick={onClick}>{inflectedWord}</button>
+      {onClick ?
+        <button onClick={onClick}>{word}</button>
+        :
+        <span>{word}</span>
+      }
     </span>
   );
 };
 
 Word.propTypes = {
-  inflectedWord: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
+  isPunctuation: PropTypes.bool,
+  onClick: PropTypes.func,
+  word: PropTypes.string.isRequired
+};
+
+Word.defaultProps = {
+  isPunctuation: false,
+  onClick: null
 };
 
 export default Word;
