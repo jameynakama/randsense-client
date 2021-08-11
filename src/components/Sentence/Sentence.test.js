@@ -8,18 +8,18 @@ beforeEach(() => {
   fetchMock.restore();
 });
 
-const expectedSentence = "There is a snake in my boots.";
+const expectedSentence = "There is a snake in my boots";
 const data = {
   inflected: expectedSentence,
   id: "666",
   base: [
-    { fields: { base: "there" } },
-    { fields: { base: "is" } },
-    { fields: { base: "a" } },
-    { fields: { base: "snake", category: "whatever" } },
-    { fields: { base: "in" } },
-    { fields: { base: "my" } },
-    { fields: { base: "boots" } },
+    { base: "there" },
+    { base: "is" },
+    { base: "a" },
+    { base: "snake", category: "whatever" },
+    { base: "in" },
+    { base: "my" },
+    { base: "boots" },
   ],
   poops: "lots",
 };

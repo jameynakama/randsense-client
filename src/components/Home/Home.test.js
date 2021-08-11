@@ -10,15 +10,23 @@ beforeEach(() => {
 
 describe("Home", () => {
   it("should render a sentence", async () => {
-    const expectedSentence = "There is a snake in my boots.";
+    const expectedSentence = ["There", "is", "a", "snake", "in", "my", "boots"];
     fetchMock.mock("end:/randsense/api/v1/sentences/", {
-      inflected: expectedSentence,
+      inflected: expectedSentence.join(' '),
+      base: [
+        { inflected: "There"},
+        { inflected: "is"},
+        { inflected: "a"},
+        { inflected: "snake"},
+        { inflected: "in"},
+        { inflected: "my"},
+        { inflected: "boots"},
+      ]
     });
     render(<Home />);
     fireEvent.click(screen.getByRole("button", { name: "Generate sentence" }));
     await waitFor(() => {
       expectedSentence
-        .split(" ")
         .forEach((word) =>
           expect(screen.getByRole("button", { name: word })).toBeInTheDocument()
         );
