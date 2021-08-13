@@ -15,3 +15,7 @@
 .wrapper button:hover {
   color: hotpink;
 }
+
+.wrapper .punctuation {
+  margin-left: -.6rem;
+}
