@@ -12,12 +12,17 @@ const Sentence = ({ sentence }) => {
   const [wordData, setWordData] = React.useState(null);
   const [showSentenceData, setShowSentenceData] = React.useState(false);
   const [incorrectEnabled, setIncorrectEnabled] = React.useState(true);
+  const [votedOn, setVotedOn] = React.useState([]);
 
   React.useEffect(() => {
     setIncorrectEnabled(true);
     setShowSentenceData(false);
     setWordData(null);
   }, [sentence]);
+
+  React.useEffect(() => {
+    setWordData(wordData);
+  }, [wordData]);
 
   const handleWordClick = (wordObject) => {
     setWordData(wordObject);
@@ -31,8 +36,15 @@ const Sentence = ({ sentence }) => {
 
   const handleIncorrectClick = (id) => {
     setIncorrectEnabled(false);
-    fetch(`${constants.RANDSENSE_API_BASE}sentences/${id}/`, {
-      method: "PATCH",
+    fetch(`${constants.RANDSENSE_API_BASE}sentences/${id}/mark-incorrect/`, {
+      method: "POST",
+    });
+  };
+
+  const handleWordRemovalClick = wordData => {
+    setVotedOn(votedOn.concat([wordData.pk]))
+    fetch(`${constants.RANDSENSE_API_BASE}words/${wordData.category}/${wordData.pk}/vote-to-remove/`, {
+      method: "POST",
     });
   };
 
@@ -71,6 +83,13 @@ const Sentence = ({ sentence }) => {
       {wordData && (
         <div className={css.data}>
           <ReactJson src={wordData} collapsed={1} theme={constants.JSON_VIEW_THEME}/>
+          <button
+            className="appButton"
+            onClick={() => handleWordRemovalClick(wordData)}
+            disabled={votedOn.includes(wordData.pk)}
+          >
+            {votedOn.includes(wordData.pk) ? "Thank you!" : "Vote to remove this word?"}
+          </button>
         </div>
       )}
     </>

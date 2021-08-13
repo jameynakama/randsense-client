@@ -1,5 +1,6 @@
 .wrapper {
-  padding: 1rem 4rem;
+  width: 60%;
+  margin: 0 auto;
 }
 
 .wrapper h1 {

@@ -23,8 +23,9 @@
 }
 
 .appButton:disabled {
-  background-color: palevioletred;
-  color: white;
+  background-color: ghostwhite;
+  border-color: slategrey;
+  color: slategrey;
   cursor: auto;
 }
 
