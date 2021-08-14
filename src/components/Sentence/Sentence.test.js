@@ -8,18 +8,20 @@ beforeEach(() => {
   fetchMock.restore();
 });
 
-const expectedSentence = "There is a snake in my boots";
+const expectedSentence = "Gads , there is a snake in my boots";
 const data = {
   inflected: expectedSentence,
   id: "666",
   base: [
-    { base: "there" },
-    { base: "is" },
-    { base: "a" },
-    { base: "snake", category: "whatever" },
-    { base: "in" },
-    { base: "my" },
-    { base: "boots" },
+    { pk: 1, category: "woof", base: "gads" },
+    { pk: 1, category: "punc", base: "," },
+    { pk: 1, category: "woof", base: "there" },
+    { pk: 2, category: "woof", base: "is" },
+    { pk: 3, category: "woof", base: "a" },
+    { pk: 4, category: "whatever", base: "snake" },
+    { pk: 5, category: "woof", base: "in" },
+    { pk: 6, category: "woof", base: "my" },
+    { pk: 7, category: "woof", base: "boots" },
   ],
   poops: "lots",
 };
@@ -59,8 +61,40 @@ describe("Sentence", () => {
     );
     expect(screen.queryByText("Thank you!")).toBeInTheDocument();
     expect(mockFetch).toBeCalledWith(
-      "http://localhost:8000/randsense/api/v1/sentences/666/",
-      { method: "PATCH" }
+      "http://localhost:8000/randsense/api/v1/sentences/666/mark-incorrect/",
+      { method: "POST" }
+    );
+  });
+
+  it("should disable the remove button after click", async () => {
+    const mockFetch = jest.fn();
+    global.fetch = mockFetch;
+
+    render(<Sentence sentence={data} />);
+
+    expect(screen.queryByText("Thank you!")).not.toBeInTheDocument();
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "there" })
+    );
+    fireEvent.click(
+      screen.getByRole("button", { name: "Vote to remove this word?" })
+    );
+    expect(screen.queryByText("Thank you!")).toBeInTheDocument();
+    expect(mockFetch).toBeCalledWith(
+      "http://localhost:8000/randsense/api/v1/words/woof/1/vote-to-remove/",
+      { method: "POST" }
+    );
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "snake" })
+    );
+    fireEvent.click(
+      screen.getByRole("button", { name: "Vote to remove this word?" })
+    );
+    expect(mockFetch).toBeCalledWith(
+      "http://localhost:8000/randsense/api/v1/words/whatever/4/vote-to-remove/",
+      { method: "POST" }
     );
   });
 });
