@@ -49,7 +49,7 @@ const Sentence = ({ sentence }) => {
   };
 
   const words = sentence.base.map(word =>
-    word.inflected || word.base
+    word.inflected || word.inflections.base || word.base
   );
   words[0] = words[0].charAt(0).toUpperCase().concat(words[0].slice(1))
 
